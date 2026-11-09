@@ -1,0 +1,56 @@
+export const Strings = {
+  appName: 'Yanchi AI',
+  appTagline: 'Legal Guidance & Wage Calculator',
+  backBtn: 'Back / ተመለስ',
+  quickExit: 'Quick Exit / አሸንፊደ ውጣ',
+  disclaimer: 'This is an estimate under Ethiopian Labour Proclamation No. 1156/2019. Consult a qualified labour lawyer for legal advice. / ይህ ግምት ነው በኢትዮጵያ የሠራተኛ ሕግ ቁጥር 1156/2019 መሠረት። ለሕጋዊ ምክር ብቁ የሠራተኛ ጠበቃን ያማክሩ።',
+
+  // Screen A - Mode Selection
+  modeSelectionTitle: 'How would you like to continue? / እንዴት ለመቀጠል ይፈልጋሉ?',
+  secureAccountTitle: 'Secure Account / የተጠበቀ መለያ',
+  secureAccountDesc: 'Pseudonymous progress & certificates saved securely. / የሂደት ማስረጃዎችዎ ደህንነቱ በተጠበቀ ሁኔታ ይቀመጣሉ።',
+  continueWithAccount: 'Continue with Account / በመለያ ይቀጥሉ →',
+  ghostModeTitle: 'Ghost Mode / ያለ መለያ ሁኔታ',
+  ghostModeDesc: 'No account required. Minimum session data stored. / ምንም መለያ አያስፈልግም። ትንሽ የክፍለ ጊዜ ውሂብ ብቻ ይቀመጣል።',
+  continueAnonymous: 'Continue Anonymously / በማንነት ሳይገለጽ ይቀጥሉ →',
+
+  // Screen B - Main Hub
+  mainHubTitle: 'Main Hub / ዋና ማውጫ',
+  wageCard: 'Wage and Overtime / ደመወዝ እና ትርፍ ሰዓት',
+  wageCardSub: 'Pay estimate / የክፍያ ግምት',
+  rightsCard: 'Worker Rights / የሰራተኛ መብቶች',
+  rightsCardSub: 'Information preview / የመረጃ ቅድመ እይታ',
+  communityCard: 'Community Support / የማህበረሰብ ድጋፍ',
+  communityCardSub: 'Support preview / የድጋፍ ቅድመ እይታ',
+  voiceCard: 'Voice Assistant / የድምፅ ረዳት',
+  voiceCardSub: 'Simulated voice preview / የድምፅ ማሳያ',
+
+  // Screen C - Wage Calculator
+  wageCalcTitle: 'Wage Calculator / ደመወዝ ሲሳይ',
+  dailyBaseSalary: 'Daily Base Salary (ETB) / ዕለታዊ መሠረት ደሞዝ',
+  dailyBaseSalaryHint: '1.0x — normal rate / መደበኛ ተመን',
+  standardOvertime: 'Standard Overtime Hours / መደበኛ ትርፍ ሰዓት',
+  standardOvertimeHint: '1.5x — overtime rate / የትርፍ ሰዓት ተመን',
+  restDayHours: 'Rest-Day or Holiday Hours / የዕረፍት ቀን ወይም በዓል ሰዓቶች',
+  restDayHint: '2.0x — holiday rate / የበዓል ተመን',
+  calculatePay: 'Calculate Pay / ደሞዝ አስላ',
+  clearReturn: 'Clear and Return / አጽዳ እና ተመለስ',
+  calculating: 'Calculating… / እየሰሉ ነው…',
+  basePay: 'Base Pay / መሠረት ክፍያ',
+  overtimePay: 'Overtime Pay / ትርፍ ሰዓት ክፍያ',
+  restDayPay: 'Rest-Day Pay / የዕረፍት ቀን ክፍያ',
+  totalPay: 'Total Pay / ጠቅላላ ክፍያ',
+  hourlyRate: 'Hourly Rate / ሰዓታዊ ተመን',
+  legalReferences: 'Legal References / ሕጋዊ ማጣቀሻዎች',
+
+  // Screen D - Voice Assistant
+  voiceAssistantTitle: 'Voice Assistant / የድምፅ ረዳት',
+  voicePrompt: 'Speak your question in Amharic / ጥያቄዎን በአማርኛ ይናገሩ...',
+  voiceListening: 'Listening… / እያዳመጠ ነው…',
+  voiceProcessing: 'Processing… / እየሰራ ነው…',
+  transcriptLabel: 'Transcript / ትርጓሜ',
+  responseLabel: 'Legal Response / ሕጋዊ ምላሽ',
+  ephemeralNotice: '🔒 Your audio is processed ephemerally and purged immediately. No audio data is stored. / ድምፅዎ ወዲያውኑ ይዘጋጃል እና ይሰረዛል። ምንም ድምፅ ውሂብ አይቀመጥም።',
+  playResponse: 'Play Response / ምላሽ አጫውት',
+  pauseResponse: 'Pause / አቁም',
+};

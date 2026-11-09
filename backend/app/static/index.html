@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Yanchi AI — Legal Guidance & Wage Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #800020;
+      --primary-dark: #5C0016;
+      --primary-light: #A30029;
+      --bg: #0D0D0D;
+      --card: #1E1E1E;
+      --card-border: #2A2A2A;
+      --surface: #252525;
+      --text: #FFFFFF;
+      --text-sec: #B0B0B0;
+      --text-muted: #707070;
+      --accent: #FF6B6B;
+      --success: #4CAF50;
+      --warning: #FF9800;
+      --error: #F44336;
+      --input-bg: #2C2C2C;
+      --input-border: #3A3A3A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans Ethiopic', -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #050505;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+
+    /* Mobile Container Frame */
+    .mobile-frame {
+      width: 100%;
+      max-width: 430px;
+      height: 92vh;
+      max-height: 900px;
+      background: var(--bg);
+      border-radius: 36px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 0 2px #222;
+      position: relative;
+    }
+
+    /* Top Global Safety Header */
+    .app-header {
+      background: var(--primary);
+      padding: 18px 16px 12px 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .exit-btn {
+      color: var(--warning);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 152, 0, 0.12);
+      border: 1px solid rgba(255, 152, 0, 0.3);
+      padding: 4px 8px;
+      border-radius: 12px;
+    }
+
+    .exit-btn:hover {
+      background: rgba(255, 152, 0, 0.25);
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* Screen Views Container */
+    .screen-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: none;
+    }
+
+    .screen-container.active {
+      display: block;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Common Card Styles */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    /* SCREEN A: Mode Selection */
+    .hero-shield {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin: 20px auto 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 8px 24px rgba(128,0,32,0.5);
+    }
+
+    .hero-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .hero-sub {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .mode-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mode-card:hover {
+      border-color: var(--primary-light);
+    }
+
+    .mode-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .mode-icon {
+      font-size: 24px;
+    }
+
+    .mode-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .mode-desc {
+      font-size: 13px;
+      color: var(--text-sec);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .pill-badge {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-sec);
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-sec);
+      border: 1px solid var(--card-border);
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    /* SCREEN B: Main Hub */
+    .greeting {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .greeting-sub {
+      font-size: 13px;
+      color: var(--text-sec);
+      margin-bottom: 18px;
+    }
+
+    .hub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .hub-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 140px;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .hub-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .hub-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .hub-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .hub-card-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* SCREEN C: Wage Calculator */
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .input-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .input-prefix {
+      padding: 12px 14px;
+      background: var(--card);
+      color: var(--text-sec);
+      font-size: 12px;
+      font-weight: 700;
+      border-right: 1px solid var(--input-border);
+    }
+
+    .text-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      outline: none;
+    }
+
+    .art-warning {
+      color: var(--warning);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .btn-calc {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 14px rgba(128,0,32,0.4);
+    }
+
+    .btn-clear {
+      background: transparent;
+      color: var(--text-sec);
+      border: 1px solid var(--card-border);
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .result-row {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+
+    .result-row.highlight {
+      background: var(--primary);
+      border-color: var(--primary-light);
+    }
+
+    .result-label {
+      font-size: 12px;
+      color: var(--text-sec);
+      margin-bottom: 2px;
+    }
+
+    .result-row.highlight .result-label {
+      color: rgba(255,255,255,0.85);
+    }
+
+    .result-val {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .result-row.highlight .result-val {
+      font-size: 22px;
+    }
+
+    /* SCREEN D: Voice Assistant */
+    .mic-section {
+      text-align: center;
+      padding: 20px 0 16px 0;
+    }
+
+    .mic-button {
+      width: 108px;
+      height: 108px;
+      border-radius: 54px;
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      font-size: 44px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(128,0,32,0.5);
+      transition: all 0.2s;
+    }
+
+    .mic-button.listening {
+      background: var(--error);
+      animation: pulse 1.2s infinite;
+    }
+
+    .mic-button.processing {
+      background: var(--primary-dark);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 16px rgba(244, 67, 54, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+    }
+
+    .mic-label {
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 14px;
+      margin-bottom: 4px;
+    }
+
+    .mic-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Audio Player Component */
+    .audio-player {
+      background: var(--card);
+      border: 1px solid var(--primary-light);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .player-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .speed-btn {
+      background: rgba(128,0,32,0.3);
+      border: 1px solid var(--primary-light);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .play-toggle {
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--primary-light);
+      cursor: pointer;
+    }
+
+    .track-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .track-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width 0.1s linear;
+    }
+
+    /* Disclaimer Footer */
+    .disclaimer-box {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .disclaimer-box strong {
+      color: var(--text-sec);
+    }
+
+    /* Privacy Banner */
+    .privacy-notice {
+      background: rgba(76, 175, 80, 0.12);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      color: var(--success);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+  
+    /* STEALTH NORMAL CALCULATOR DISGUISE (Exact match to screenshot) */
+    .stealth-calculator {
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: #ECEEF2;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px 16px 20px 16px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+
+    .stealth-calculator.active {
+      display: flex;
+    }
+
+    .calc-top-bar {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .secret-unlock-trigger {
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.08);
+      color: #64748B;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .secret-unlock-trigger:hover {
+      background: rgba(0,0,0,0.08);
+      color: #0F172A;
+    }
+
+    .calc-display {
+      text-align: right;
+      color: #111827;
+      font-size: 72px;
+      font-weight: 400;
+      line-height: 1.1;
+      padding: 0 12px 28px 12px;
+      word-break: break-all;
+      min-height: 84px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      letter-spacing: -1px;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .calc-btn {
+      height: 72px;
+      border-radius: 22px;
+      border: none;
+      font-size: 26px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      transition: transform 0.08s, filter 0.08s;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .calc-btn:active {
+      transform: scale(0.96);
+      filter: brightness(0.93);
+    }
+
+    /* Grey function buttons: C, ÷, ×, -, + */
+    .calc-btn.btn-grey {
+      background: #D1D5DC;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    /* White number buttons */
+    .calc-btn.btn-white {
+      background: #FFFFFF;
+      color: #111827;
+    }
+
+    /* Dark equal button */
+    .calc-btn.btn-dark {
+      background: #23272F;
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* Wide 0 button spanning 2 columns */
+    .calc-btn.btn-wide-zero {
+      grid-column: span 2;
+      border-radius: 22px;
+      justify-content: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="mobile-frame">
+
+    <!-- STEALTH NORMAL CALCULATOR (Exact match to screenshot) -->
+    <div class="stealth-calculator" id="stealthCalculator">
+      <div class="calc-top-bar">
+        <button class="secret-unlock-trigger" onclick="unlockFromStealth()" title="Return to Yanchi AI">
+          <span>🛡️ Return to Yanchi AI</span>
+        </button>
+        <span style="font-size: 11px; color: #94A3B8;">PIN: 1156=</span>
+      </div>
+
+      <div class="calc-display" id="calcDisplay">0</div>
+
+      <div class="calc-grid">
+        <!-- Row 1 -->
+        <button class="calc-btn btn-grey" onclick="calcPress('C')">C</button>
+        <button class="calc-btn btn-grey" onclick="calcPress('÷')">÷</button>
+        <button class="calc-btn btn-grey" onclick="calcPress('×')">×</button>
+        <button class="calc-btn btn-grey" onclick="calcPress('-')">-</button>
+
+        <!-- Row 2 -->
+        <button class="calc-btn btn-white" onclick="calcPress('7')">7</button>
+        <button class="calc-btn btn-white" onclick="calcPress('8')">8</button>
+        <button class="calc-btn btn-white" onclick="calcPress('9')">9</button>
+        <button class="calc-btn btn-grey" onclick="calcPress('+')">+</button>
+
+        <!-- Row 3 -->
+        <button class="calc-btn btn-white" onclick="calcPress('4')">4</button>
+        <button class="calc-btn btn-white" onclick="calcPress('5')">5</button>
+        <button class="calc-btn btn-white" onclick="calcPress('6')">6</button>
+        <button class="calc-btn btn-dark" onclick="calcPress('=')">=</button>
+
+        <!-- Row 4 -->
+        <button class="calc-btn btn-white" onclick="calcPress('1')">1</button>
+        <button class="calc-btn btn-white" onclick="calcPress('2')">2</button>
+        <button class="calc-btn btn-white" onclick="calcPress('3')">3</button>
+        <button class="calc-btn btn-white" onclick="calcPress('.')">.</button>
+
+        <!-- Row 5 -->
+        <button class="calc-btn btn-white btn-wide-zero" onclick="calcPress('0')">0</button>
+      </div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="app-header" id="appHeader">
+      <div class="header-row">
+        <button class="nav-btn" id="backBtn" onclick="goBack()">
+          ← Back / ተመለስ
+        </button>
+        <div class="brand-title">Yanchi AI</div>
+        <button class="exit-btn" onclick="quickExit()">
+          ⏻ Quick Exit / አሸንፊደ ውጣ
+        </button>
+      </div>
+      <div class="header-subtitle" id="headerSubtitle">Ethiopian Labour Proclamation No. 1156/2019</div>
+    </header>
+
+    <!-- SCREEN A: Mode Selection -->
+    <div class="screen-container active" id="screenA">
+      <div class="hero-shield">⚖️</div>
+      <h1 class="hero-title">Ethiopian Labour Law<br>Legal Guidance Platform</h1>
+      <p class="hero-sub">Proclamation No. 1156/2019 • የኢትዮጵያ የሠራተኛ ሕግ</p>
+
+      <div class="mode-card" onclick="selectMode('secure')">
+        <div class="mode-header">
+          <span class="mode-icon">🛡️</span>
+          <div class="mode-title">Secure Account / የተጠበቀ መለያ</div>
+        </div>
+        <p class="mode-desc">Pseudonymous progress & calculation records saved securely.</p>
+        <div class="badge-row">
+          <span class="pill-badge">✓ Certificates Saved</span>
+          <span class="pill-badge">✓ History Tracked</span>
+        </div>
+        <button class="btn-primary">Continue with Account / በመለያ ይቀጥሉ →</button>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('ghost')">
+        <div class="mode-header">
+          <span class="mode-icon">🕶️</span>
+          <div class="mode-title">Ghost Mode / ያለ መለያ ሁኔታ</div>
+        </div>
+        <p class="mode-desc">Zero account required. Minimum session data stored and purged immediately.</p>
+        <div class="badge-row">
+          <span class="pill-badge">🔒 Zero-Trust Memory</span>
+          <span class="pill-badge">🗑 Auto-Purge</span>
+        </div>
+        <button class="btn-ghost">Continue Anonymously / በማንነት ሳይገለጽ ይቀጥሉ →</button>
+      </div>
+
+      <div class="disclaimer-box" style="text-align: center;">
+        🇪🇹 Built for Ethiopian domestic workers under Labour Proclamation No. 1156/2019
+      </div>
+    </div>
+
+    <!-- SCREEN B: Main Hub -->
+    <div class="screen-container" id="screenB">
+      <div class="privacy-notice" id="ghostNotice" style="display: none;">
+        🔒 Ghost Mode Active — Ephemeral zero-storage session / ምንም ውሂብ አይቀመጥም
+      </div>
+
+      <h2 class="greeting">Welcome to Yanchi AI</h2>
+      <p class="greeting-sub">What do you need assistance with today?</p>
+
+      <div class="hub-grid">
+        <div class="hub-card" onclick="navigateTo('screenC')">
+          <div>
+            <div class="hub-card-icon" style="background: rgba(128,0,32,0.2); color: #FF6B6B;">🧮</div>
+            <div class="hub-card-title">Wage and Overtime<br>ደመወዝ እና ትርፍ ሰዓት</div>
+            <div class="hub-card-sub">Pay estimate per Art. 68–69</div>
+          </div>
+          <div style="text-align: right; font-size: 14px; color: #FF6B6B;">→</div>
+        </div>
+
+        <div class="hub-card" onclick="navigateTo('screenF')">
+          <div>
+            <div class="hub-card-icon" style="background: rgba(21,101,192,0.2); color: #64B5F6;">📜</div>
+            <div class="hub-card-title">Worker Rights<br>የሰራተኛ መብቶች</div>
+            <div class="hub-card-sub">Information preview</div>
+          </div>
+          <div style="text-align: right; font-size: 14px; color: #64B5F6;">→</div>
+        </div>
+
+        <div class="hub-card" onclick="navigateTo('screenE')">
+          <div>
+            <div class="hub-card-icon" style="background: rgba(46,125,50,0.2); color: #81C784;">🤝</div>
+            <div class="hub-card-title">Community Support<br>የማህበረሰብ ድጋፍ</div>
+            <div class="hub-card-sub">Legal hotlines (EWLA, CETU)</div>
+          </div>
+          <div style="text-align: right; font-size: 14px; color: #81C784;">→</div>
+        </div>
+
+        <div class="hub-card" onclick="navigateTo('screenD')">
+          <div>
+            <div class="hub-card-icon" style="background: rgba(106,27,154,0.2); color: #BA68C8;">🎙️</div>
+            <div class="hub-card-title">Voice Assistant<br>የድምፅ ረዳት</div>
+            <div class="hub-card-sub">Amharic speech legal Q&A</div>
+          </div>
+          <div style="text-align: right; font-size: 14px; color: #BA68C8;">→</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px;">ℹ️ Proclamation No. 1156/2019 Quick Rules</div>
+        <div style="font-size: 12px; color: var(--text-sec); line-height: 1.5;">
+          • Normal hours: Max 8 hrs/day, 48 hrs/week (Art. 61)<br>
+          • Standard overtime: 1.5x hourly wage (Art. 68)<br>
+          • Rest day / Holiday work: 2.0x hourly wage (Art. 69)<br>
+          • Overtime limit: Max 2 hrs/day, 10 hrs/week (Art. 70)
+        </div>
+      </div>
+    </div>
+
+        <!-- SCREEN C: Wage and Overtime Calculator -->
+    <div class="screen-container" id="screenC">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">
+        🧮 Statutory Wage & Overtime Engine
+      </div>
+      <div style="font-size: 12px; color: var(--text-sec); margin-bottom: 14px;">
+        Ethiopian Labour Proclamation No. 1156/2019 (Art. 61 & 68)
+      </div>
+
+      <!-- Basic Monthly Pay -->
+      <div class="input-group">
+        <label class="input-label">Basic Monthly Pay (ETB) / የወር መሠረታዊ ደመወዝ</label>
+        <div class="input-hint">Gross monthly pay before overtime additions</div>
+        <div class="input-box">
+          <div class="input-prefix">ETB</div>
+          <input type="number" id="basicMonthlyPay" class="text-input" placeholder="e.g. 10400" value="10400">
+        </div>
+      </div>
+
+      <!-- Monthly Hours Divisor -->
+      <div class="input-group">
+        <label class="input-label">Monthly Standard Hours Divisor / የወር መደበኛ የሥራ ሰዓታት</label>
+        <div class="input-hint">Default: 208 hrs (48 hrs/week per Art. 61)</div>
+        <div class="input-box">
+          <div class="input-prefix">HRS</div>
+          <input type="number" id="monthlyHoursDivisor" class="text-input" placeholder="208" value="208">
+        </div>
+      </div>
+
+      <!-- Daytime Overtime (6:00 AM - 10:00 PM, 1.5x) -->
+      <div class="input-group">
+        <label class="input-label">Daytime Overtime Hours (6:00 AM – 10:00 PM) / የቀን ትርፍ ሰዓት</label>
+        <div class="input-hint">1.5× Rate Multiplier (Art. 68(1)(a))</div>
+        <div class="input-box">
+          <div class="input-prefix">1.5×</div>
+          <input type="number" id="daytimeHours" class="text-input" placeholder="0" value="4">
+        </div>
+      </div>
+
+      <!-- Nighttime Overtime (10:00 PM - 6:00 AM, 1.75x) -->
+      <div class="input-group">
+        <label class="input-label">Nighttime Overtime Hours (10:00 PM – 6:00 AM) / የሌሊት ትርፍ ሰዓት</label>
+        <div class="input-hint">1.75× Rate Multiplier (Art. 68(1)(b))</div>
+        <div class="input-box">
+          <div class="input-prefix">1.75×</div>
+          <input type="number" id="nighttimeHours" class="text-input" placeholder="0" value="2">
+        </div>
+      </div>
+
+      <!-- Weekly Rest Day (2.0x) -->
+      <div class="input-group">
+        <label class="input-label">Weekly Rest Day Hours / የሳምንቱ የዕረፍት ቀን የሥራ ሰዓት</label>
+        <div class="input-hint">2.0× Rate Multiplier (Art. 68(1)(c))</div>
+        <div class="input-box">
+          <div class="input-prefix">2.0×</div>
+          <input type="number" id="restDayHours" class="text-input" placeholder="0" value="4">
+        </div>
+      </div>
+
+      <!-- Public Holiday Overtime (2.5x) -->
+      <div class="input-group">
+        <label class="input-label">Public Holiday Overtime Hours / የሕዝብ በዓል የሥራ ሰዓት</label>
+        <div class="input-hint">2.5× Rate Multiplier (Art. 68(1)(d))</div>
+        <div class="input-box">
+          <div class="input-prefix">2.5×</div>
+          <input type="number" id="publicHolidayHours" class="text-input" placeholder="0" value="8">
+        </div>
+      </div>
+
+      <button class="btn-calc" onclick="calculateWage()">
+        <span>Compute Pay & Overtime Breakdown / ደመወዝ አስላ</span>
+      </button>
+
+      <button class="btn-clear" onclick="clearCalculator()">
+        ↺ Clear and Return / አጽዳ እና ተመለስ
+      </button>
+
+      <!-- Results Container (Breakdown FIRST, Final Result SECOND) -->
+      <div id="wageResults" style="display: none;">
+        <!-- SECTION 1: Breakdown by Category FIRST -->
+        <div style="font-size: 15px; font-weight: 800; color: #FFF; margin-bottom: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
+          1. Calculation Breakdown by Category
+        </div>
+
+        <div class="result-row">
+          <div class="result-label">Base Hourly Rate (መሠረታዊ የሰዓት ተመን)</div>
+          <div style="font-size: 11px; color: var(--text-sec); margin-bottom: 4px;" id="formulaHourlyRate">
+            10400.00 ETB ÷ 208.00 hrs
+          </div>
+          <div class="result-val" id="resHourlyRate">50.00 ETB/hr</div>
+        </div>
+
+        <div class="result-row">
+          <div class="result-label">Daytime Overtime (1.5×) / የቀን ትርፍ ሰዓት</div>
+          <div style="font-size: 11px; color: var(--text-sec); margin-bottom: 4px;" id="formulaDaytime">
+            4.00 hrs × 50.00 ETB × 1.5
+          </div>
+          <div class="result-val" id="resDaytimePay">300.00 ETB</div>
+        </div>
+
+        <div class="result-row">
+          <div class="result-label">Nighttime Overtime (1.75×) / የሌሊት ትርፍ ሰዓት</div>
+          <div style="font-size: 11px; color: var(--text-sec); margin-bottom: 4px;" id="formulaNighttime">
+            2.00 hrs × 50.00 ETB × 1.75
+          </div>
+          <div class="result-val" id="resNighttimePay">175.00 ETB</div>
+        </div>
+
+        <div class="result-row">
+          <div class="result-label">Weekly Rest Day Overtime (2.0×) / የዕረፍት ቀን</div>
+          <div style="font-size: 11px; color: var(--text-sec); margin-bottom: 4px;" id="formulaRestDay">
+            4.00 hrs × 50.00 ETB × 2.0
+          </div>
+          <div class="result-val" id="resRestDayPay">400.00 ETB</div>
+        </div>
+
+        <div class="result-row">
+          <div class="result-label">Public Holiday Overtime (2.5×) / የሕዝብ በዓል</div>
+          <div style="font-size: 11px; color: var(--text-sec); margin-bottom: 4px;" id="formulaHoliday">
+            8.00 hrs × 50.00 ETB × 2.5
+          </div>
+          <div class="result-val" id="resHolidayPay">1000.00 ETB</div>
+        </div>
+
+        <!-- SECTION 2: Final Calculated Results SECOND -->
+        <div style="font-size: 15px; font-weight: 800; color: #FFF; margin-top: 18px; margin-bottom: 10px; border-bottom: 1px solid var(--card-border); padding-bottom: 6px;">
+          2. Final Calculated Results
+        </div>
+
+        <div class="result-row" style="background: rgba(128,0,32,0.25); border-color: var(--primary-light);">
+          <div class="result-label">Total Overtime Pay / ጠቅላላ የትርፍ ሰዓት ክፍያ</div>
+          <div class="result-val" id="resTotalOvertimePay">1875.00 ETB</div>
+        </div>
+
+        <div class="result-row highlight" style="margin-top: 6px;">
+          <div class="result-label" style="font-weight: 700;">Gross Earnings (Basic + Overtime) / ጠቅላላ ተከፋይ</div>
+          <div class="result-val" id="resGrossEarnings">12275.00 ETB</div>
+        </div>
+
+        <!-- Template Monospace Text Container -->
+        <div class="card" style="margin-top: 14px; background: #141414;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--primary-light); margin-bottom: 6px;">
+            📄 Formatted Output Template:
+          </div>
+          <pre id="resFormattedTemplate" style="font-size: 11px; color: #E0E0E0; white-space: pre-wrap; font-family: monospace; line-height: 1.5;"></pre>
+        </div>
+
+        <!-- Legal References -->
+        <div class="card" style="margin-top: 10px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-sec); margin-bottom: 6px;">
+            📌 Legal References (Proclamation No. 1156/2019):
+          </div>
+          <div id="resLegalRefs" style="font-size: 11px; color: var(--text-muted); line-height: 1.6;"></div>
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Disclaimer:</strong> Statutory calculation under Ethiopian Labour Proclamation No. 1156/2019. Standard divisor: 208 hours/month. Consult a qualified labour lawyer for formal legal representation.
+      </div>
+    </div>
+
+    <!-- SCREEN D: Voice Assistant -->
+    <div class="screen-container" id="screenD">
+      <div class="privacy-notice">
+        🔒 Ephemeral Memory: Speech inputs are processed in-memory and purged immediately.
+      </div>
+
+      <div class="mic-section">
+        <button class="mic-button" id="micBtn" onclick="toggleVoice()">
+          🎙️
+        </button>
+        <div class="mic-label" id="micLabel">Speak your question in Amharic / ጥያቄዎን በአማርኛ ይናገሩ...</div>
+        <div class="mic-sub" id="micSub">Tap the microphone to ask about wages, leave, or termination</div>
+      </div>
+
+      <!-- Quick Suggested Questions -->
+      <div style="margin-bottom: 14px;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-sec); margin-bottom: 8px;">
+          Suggested Prompts / የተጠቆሙ ጥያቄዎች:
+        </div>
+        <button class="btn-ghost" style="margin-bottom: 6px; text-align: left; font-size: 12px;" onclick="askPreset('What is the overtime pay rate?')">
+          🗣️ "የትርፍ ሰዓት ክፍያ ተመን ስንት ነው? / Overtime rate"
+        </button>
+        <button class="btn-ghost" style="margin-bottom: 6px; text-align: left; font-size: 12px;" onclick="askPreset('What is the rest day overtime rate?')">
+          🗣️ "የዕረፍት ቀን የሥራ ክፍያ ስንት ነው? / Rest-day rate"
+        </button>
+        <button class="btn-ghost" style="margin-bottom: 6px; text-align: left; font-size: 12px;" onclick="askPreset('How many days of maternity leave am I entitled to?')">
+          🗣️ "የወሊድ ፈቃድ ስንት ቀናት ነው? / Maternity leave"
+        </button>
+      </div>
+
+      <!-- Transcript Container -->
+      <div class="card" id="transcriptContainer" style="display: none;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-sec); margin-bottom: 4px;">
+          📝 Transcript / ትርጓሜ:
+        </div>
+        <div id="transcriptText" style="font-size: 14px; font-style: italic; color: #fff;"></div>
+      </div>
+
+      <!-- Audio Player Controls Container -->
+      <div class="audio-player" id="audioPlayerContainer" style="display: none;">
+        <div class="player-header">
+          <div class="player-title">🔊 Audio Response / የድምፅ ምላሽ</div>
+          <button class="speed-btn" id="speedBtn" onclick="toggleSpeed()">1.0x</button>
+        </div>
+        <div class="player-controls">
+          <button class="play-toggle" id="playBtn" onclick="togglePlayback()">▶</button>
+          <div class="track-bar">
+            <div class="track-fill" id="trackFill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legal QA Response Container -->
+      <div class="card" id="legalResponseContainer" style="display: none; border-color: var(--primary);">
+        <div style="font-size: 13px; font-weight: 700; color: var(--primary-light); margin-bottom: 6px;">
+          ⚖️ Legal Citation (Proclamation No. 1156/2019):
+        </div>
+        <div id="legalAnswerText" style="font-size: 13px; line-height: 1.6; margin-bottom: 10px;"></div>
+        <div id="legalSourcesList" style="font-size: 11px; color: var(--text-sec); margin-bottom: 8px;"></div>
+        <div class="pill-badge" style="background: rgba(76,175,80,0.15); color: var(--success); display: inline-block;">
+          ✓ Session purged (Ghost Mode Zero-Storage)
+        </div>
+      </div>
+
+      <div class="disclaimer-box">
+        <strong>Disclaimer:</strong> Simulated Amharic voice preview under Ethiopian Labour Proclamation No. 1156/2019.
+      </div>
+    </div>
+
+    <!-- SCREEN E: Community Support -->
+    <div class="screen-container" id="screenE">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">
+        🤝 Community Support / የማህበረሰብ ድጋፍ
+      </div>
+
+      <!-- Hotline Alert -->
+      <div class="card" style="background: var(--primary-dark); border-color: var(--primary-light);">
+        <div style="font-size: 12px; color: rgba(255,255,255,0.8);">Toll-Free Legal Helpline</div>
+        <div style="font-size: 20px; font-weight: 800; margin: 2px 0;">📞 Dial 6922 (EWLA)</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.7);">
+          Ethiopian Women Lawyers Association — Free legal counsel for workers.
+        </div>
+      </div>
+
+      <!-- Helplines List -->
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 2px;">CETU Labour Union</div>
+        <div style="font-size: 12px; color: var(--primary-light); margin-bottom: 4px;">የኢትዮጵያ ሠራተኛ ማኅበራት ኮንፌዴሬሽን</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-bottom: 8px;">
+          Confederation of Ethiopian Trade Unions — Assistance with wage disputes and collective rights.
+        </div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--accent);">Tel: +251 11 551 5444</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 2px;">Ministry of Labour & Skills</div>
+        <div style="font-size: 12px; color: var(--primary-light); margin-bottom: 4px;">የሥራና ክህሎት ሚኒስቴር</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-bottom: 8px;">
+          Government labour inspection authority under Proclamation No. 1156/2019.
+        </div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--accent);">Hotline: 8221</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 2px;">AAU Free Legal Aid Clinic</div>
+        <div style="font-size: 12px; color: var(--primary-light); margin-bottom: 4px;">የአዲስ አበባ ዩኒቨርሲቲ ነፃ የሕግ ክሊኒክ</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-bottom: 8px;">
+          Pro bono legal guidance on unpaid wages and severance claims.
+        </div>
+        <div style="font-size: 13px; font-weight: 700; color: var(--accent);">Sidist Kilo Campus</div>
+      </div>
+
+      <!-- Dispute Redressal Steps -->
+      <div class="card">
+        <div style="font-size: 13px; font-weight: 700; margin-bottom: 6px;">
+          ⚖️ Dispute Resolution Guide (Art. 32):
+        </div>
+        <div style="font-size: 12px; color: var(--text-sec); line-height: 1.6;">
+          1. Submit to Internal Grievance Committee<br>
+          2. Conciliation through Labour Inspection Authority<br>
+          3. Adjudication by Labour Relations Board or Court
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN F: Worker Rights -->
+    <div class="screen-container" id="screenF">
+      <div style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">
+        📜 Worker Rights Guide / የሰራተኛ መብቶች
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; color: #fff;">⏰ Working Hours (Art. 61)</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-top: 4px;">
+          Normal working hours shall not exceed 8 hours per day or 48 hours per week.
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; color: #fff;">💵 Overtime Rates (Art. 68–69)</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-top: 4px;">
+          1.5x for standard workday overtime. 2.0x for rest-days and declared public holidays.
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; color: #fff;">🤰 Maternity Leave (Art. 67)</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-top: 4px;">
+          90 consecutive days paid maternity leave, with minimum 45 days after delivery.
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; color: #fff;">📅 Annual Leave (Art. 65)</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-top: 4px;">
+          Every employee is entitled to 1 working day leave for each month of service.
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size: 14px; font-weight: 700; color: #fff;">🛡️ Protection Against Forced Labour (Art. 42)</div>
+        <div style="font-size: 12px; color: var(--text-sec); margin-top: 4px;">
+          Forced or compulsory labour is strictly prohibited by law.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let navHistory = ['screenA'];
+    let isGhostMode = false;
+    let isListening = false;
+    let isPlaying = false;
+    let currentSpeed = 1.0;
+    let playbackInterval = null;
+    let playbackPercent = 0;
+
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen-container').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        navHistory.push(screenId);
+        updateHeader();
+      }
+    }
+
+    function goBack() {
+      if (navHistory.length > 1) {
+        navHistory.pop();
+        const prev = navHistory[navHistory.length - 1];
+        document.querySelectorAll('.screen-container').forEach(s => s.classList.remove('active'));
+        document.getElementById(prev).classList.add('active');
+        updateHeader();
+      }
+    }
+
+    function updateHeader() {
+      const current = navHistory[navHistory.length - 1];
+      const backBtn = document.getElementById('backBtn');
+      const sub = document.getElementById('headerSubtitle');
+
+      if (current === 'screenA') {
+        backBtn.style.visibility = 'hidden';
+        sub.innerText = 'Ethiopian Labour Proclamation No. 1156/2019';
+      } else {
+        backBtn.style.visibility = 'visible';
+        if (current === 'screenB') sub.innerText = 'Main Hub / ዋና ማውጫ';
+        else if (current === 'screenC') sub.innerText = 'Wage & Overtime / ደመወዝ አስላ';
+        else if (current === 'screenD') sub.innerText = 'Voice Assistant / የድምፅ ረዳት';
+        else if (current === 'screenE') sub.innerText = 'Community Support / የማህበረሰብ ድጋፍ';
+        else if (current === 'screenF') sub.innerText = 'Worker Rights / የሰራተኛ መብቶች';
+      }
+    }
+
+    function selectMode(mode) {
+      isGhostMode = (mode === 'ghost');
+      document.getElementById('ghostNotice').style.display = isGhostMode ? 'flex' : 'none';
+      navigateTo('screenB');
+    }
+
+    
+    // STEALTH CALCULATOR STATE & LOGIC
+    let calcCurrentVal = '0';
+    let calcPrevVal = null;
+    let calcOperator = null;
+    let calcResetOnNext = false;
+    let calcInputBuffer = '';
+
+    function calcPress(val) {
+      calcInputBuffer += val;
+      if (calcInputBuffer.length > 10) {
+        calcInputBuffer = calcInputBuffer.slice(-10);
+      }
+
+      // Secret unlock codes: 1156= (Labour Proclamation) or 2019= (Year of Proclamation)
+      if (calcInputBuffer.endsWith('1156=') || calcInputBuffer.endsWith('2019=')) {
+        unlockFromStealth();
+        return;
+      }
+
+      if (val === 'C') {
+        calcCurrentVal = '0';
+        calcPrevVal = null;
+        calcOperator = null;
+        calcResetOnNext = false;
+        updateCalcDisplay();
+        return;
+      }
+
+      if (['+', '-', '×', '÷'].includes(val)) {
+        if (calcPrevVal !== null && calcOperator && !calcResetOnNext) {
+          calculateMath();
+        }
+        calcPrevVal = parseFloat(calcCurrentVal);
+        calcOperator = val;
+        calcResetOnNext = true;
+        return;
+      }
+
+      if (val === '=') {
+        if (calcPrevVal !== null && calcOperator) {
+          calculateMath();
+          calcPrevVal = null;
+          calcOperator = null;
+          calcResetOnNext = true;
+        }
+        return;
+      }
+
+      if (val === '.') {
+        if (calcResetOnNext) {
+          calcCurrentVal = '0.';
+          calcResetOnNext = false;
+        } else if (!calcCurrentVal.includes('.')) {
+          calcCurrentVal += '.';
+        }
+        updateCalcDisplay();
+        return;
+      }
+
+      // Number input
+      if (calcCurrentVal === '0' || calcResetOnNext) {
+        calcCurrentVal = val;
+        calcResetOnNext = false;
+      } else {
+        if (calcCurrentVal.length < 12) {
+          calcCurrentVal += val;
+        }
+      }
+      updateCalcDisplay();
+    }
+
+    function calculateMath() {
+      const current = parseFloat(calcCurrentVal);
+      const prev = calcPrevVal;
+      let result = 0;
+      if (calcOperator === '+') result = prev + current;
+      else if (calcOperator === '-') result = prev - current;
+      else if (calcOperator === '×') result = prev * current;
+      else if (calcOperator === '÷') result = current !== 0 ? prev / current : 0;
+      calcCurrentVal = parseFloat(result.toFixed(6)).toString();
+      updateCalcDisplay();
+    }
+
+    function updateCalcDisplay() {
+      const disp = document.getElementById('calcDisplay');
+      if (disp) disp.innerText = calcCurrentVal;
+    }
+
+    function unlockFromStealth() {
+      const stealthEl = document.getElementById('stealthCalculator');
+      const headerEl = document.getElementById('appHeader');
+      if (stealthEl) stealthEl.classList.remove('active');
+      if (headerEl) headerEl.style.display = 'block';
+      calcCurrentVal = '0';
+      calcInputBuffer = '';
+      updateCalcDisplay();
+      navigateTo('screenB');
+    }
+
+        function quickExit() {
+      // Immediate Safety Exit: immediately redirect to pure normal calculator screen
+      window.location.href = '/calculator';
+    }
+
+        // Wage Calculator with live API fetch
+    async function calculateWage() {
+      const basicPay = parseFloat(document.getElementById('basicMonthlyPay').value) || 0;
+      const divisor = parseFloat(document.getElementById('monthlyHoursDivisor').value) || 208;
+      const daytime = parseFloat(document.getElementById('daytimeHours').value) || 0;
+      const nighttime = parseFloat(document.getElementById('nighttimeHours').value) || 0;
+      const restDay = parseFloat(document.getElementById('restDayHours').value) || 0;
+      const holiday = parseFloat(document.getElementById('publicHolidayHours').value) || 0;
+
+      if (basicPay <= 0) {
+        alert('Please enter a valid Basic Monthly Pay greater than 0.');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/v1/calculate-wage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            basic_monthly_pay: basicPay,
+            monthly_hours_divisor: divisor,
+            daytime_overtime_hours: daytime,
+            nighttime_overtime_hours: nighttime,
+            rest_day_overtime_hours: restDay,
+            public_holiday_overtime_hours: holiday
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          renderWageResults(data);
+        } else {
+          fallbackLocalCalc(basicPay, divisor, daytime, nighttime, restDay, holiday);
+        }
+      } catch (err) {
+        fallbackLocalCalc(basicPay, divisor, daytime, nighttime, restDay, holiday);
+      }
+    }
+
+    function fallbackLocalCalc(basic, divisor, day, night, rest, hol) {
+      const hourly = basic / divisor;
+      const daySub = hourly * 1.5 * day;
+      const nightSub = hourly * 1.75 * night;
+      const restSub = hourly * 2.0 * rest;
+      const holSub = hourly * 2.5 * hol;
+      const totalOt = daySub + nightSub + restSub + holSub;
+      const gross = basic + totalOt;
+
+      const fmt = `#### 1. Calculation Breakdown by Category
+
+* Base Hourly Rate:
+  ${basic.toFixed(2)} ETB ÷ ${divisor.toFixed(2)} hrs = ${hourly.toFixed(2)} ETB/hr
+
+* Daytime Overtime (1.5×):
+  ${day.toFixed(2)} hrs × ${hourly.toFixed(2)} ETB × 1.5 = ${daySub.toFixed(2)} ETB
+
+* Nighttime Overtime (1.75×):
+  ${night.toFixed(2)} hrs × ${hourly.toFixed(2)} ETB × 1.75 = ${nightSub.toFixed(2)} ETB
+
+* Weekly Rest Day Overtime (2.0×):
+  ${rest.toFixed(2)} hrs × ${hourly.toFixed(2)} ETB × 2.0 = ${restSub.toFixed(2)} ETB
+
+* Public Holiday Overtime (2.5×):
+  ${hol.toFixed(2)} hrs × ${hourly.toFixed(2)} ETB × 2.5 = ${holSub.toFixed(2)} ETB
+
+---
+
+#### 2. Final Calculated Results
+
+* Total Overtime Pay: ${totalOt.toFixed(2)} ETB
+* Gross Earnings (Basic + Overtime): ${gross.toFixed(2)} ETB`;
+
+      renderWageResults({
+        hourly_rate: hourly,
+        breakdown: {
+          base_hourly_rate: { formula: basic.toFixed(2) + " ETB ÷ " + divisor.toFixed(2) + " hrs = " + hourly.toFixed(2) + " ETB/hr" },
+          daytime_overtime: { formula: day.toFixed(2) + " hrs × " + hourly.toFixed(2) + " ETB × 1.5 = " + daySub.toFixed(2) + " ETB", subtotal: daySub },
+          nighttime_overtime: { formula: night.toFixed(2) + " hrs × " + hourly.toFixed(2) + " ETB × 1.75 = " + nightSub.toFixed(2) + " ETB", subtotal: nightSub },
+          weekly_rest_day_overtime: { formula: rest.toFixed(2) + " hrs × " + hourly.toFixed(2) + " ETB × 2.0 = " + restSub.toFixed(2) + " ETB", subtotal: restSub },
+          public_holiday_overtime: { formula: hol.toFixed(2) + " hrs × " + hourly.toFixed(2) + " ETB × 2.5 = " + holSub.toFixed(2) + " ETB", subtotal: holSub }
+        },
+        final_results: {
+          total_overtime_pay: totalOt,
+          gross_earnings: gross
+        },
+        formatted_text: fmt,
+        legal_references: [
+          'Proclamation No. 1156/2019, Art. 61 — Normal working hours (208 hrs/month)',
+          'Proclamation No. 1156/2019, Art. 68(1)(a) — Daytime overtime (1.5×)',
+          'Proclamation No. 1156/2019, Art. 68(1)(b) — Nighttime overtime (1.75×)',
+          'Proclamation No. 1156/2019, Art. 68(1)(c) — Rest day overtime (2.0×)',
+          'Proclamation No. 1156/2019, Art. 68(1)(d) — Public holiday overtime (2.5×)'
+        ]
+      });
+    }
+
+    function renderWageResults(data) {
+      document.getElementById('resHourlyRate').innerText = data.hourly_rate.toFixed(2) + ' ETB/hr';
+      document.getElementById('formulaHourlyRate').innerText = data.breakdown.base_hourly_rate.formula;
+
+      document.getElementById('resDaytimePay').innerText = data.breakdown.daytime_overtime.subtotal.toFixed(2) + ' ETB';
+      document.getElementById('formulaDaytime').innerText = data.breakdown.daytime_overtime.formula;
+
+      document.getElementById('resNighttimePay').innerText = data.breakdown.nighttime_overtime.subtotal.toFixed(2) + ' ETB';
+      document.getElementById('formulaNighttime').innerText = data.breakdown.nighttime_overtime.formula;
+
+      document.getElementById('resRestDayPay').innerText = data.breakdown.weekly_rest_day_overtime.subtotal.toFixed(2) + ' ETB';
+      document.getElementById('formulaRestDay').innerText = data.breakdown.weekly_rest_day_overtime.formula;
+
+      document.getElementById('resHolidayPay').innerText = data.breakdown.public_holiday_overtime.subtotal.toFixed(2) + ' ETB';
+      document.getElementById('formulaHoliday').innerText = data.breakdown.public_holiday_overtime.formula;
+
+      document.getElementById('resTotalOvertimePay').innerText = data.final_results.total_overtime_pay.toFixed(2) + ' ETB';
+      document.getElementById('resGrossEarnings').innerText = data.final_results.gross_earnings.toFixed(2) + ' ETB';
+
+      document.getElementById('resFormattedTemplate').innerText = data.formatted_text;
+
+      const refs = document.getElementById('resLegalRefs');
+      refs.innerHTML = data.legal_references.map(r => '• ' + r).join('<br>');
+
+      document.getElementById('wageResults').style.display = 'block';
+    }
+
+    function clearCalculator() {
+      document.getElementById('daytimeHours').value = '0';
+      document.getElementById('nighttimeHours').value = '0';
+      document.getElementById('restDayHours').value = '0';
+      document.getElementById('publicHolidayHours').value = '0';
+      document.getElementById('wageResults').style.display = 'none';
+      goBack();
+    }
+
+    // Voice Assistant with live API fetch
+    function toggleVoice() {
+      const mic = document.getElementById('micBtn');
+      const label = document.getElementById('micLabel');
+
+      if (!isListening) {
+        isListening = true;
+        mic.classList.add('listening');
+        label.innerText = 'Listening… / እያዳመጠ ነው…';
+
+        setTimeout(() => {
+          mic.classList.remove('listening');
+          mic.classList.add('processing');
+          label.innerText = 'Processing Amharic query… / እየሰራ ነው…';
+
+          askPreset('What are my overtime rights under Ethiopian law?');
+        }, 2200);
+      } else {
+        isListening = false;
+        mic.classList.remove('listening', 'processing');
+        label.innerText = 'Speak your question in Amharic / ጥያቄዎን በአማርኛ ይናገሩ...';
+      }
+    }
+
+    async function askPreset(question) {
+      document.getElementById('transcriptContainer').style.display = 'block';
+      document.getElementById('transcriptText').innerText = '"' + question + '"';
+
+      try {
+        const response = await fetch('/api/v1/legal-qa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            question: question,
+            language: 'en',
+            ghost_mode: isGhostMode
+          })
+        });
+
+        const mic = document.getElementById('micBtn');
+        const label = document.getElementById('micLabel');
+        mic.classList.remove('listening', 'processing');
+        label.innerText = 'Tap to ask another question / እንደገና ይጠይቁ';
+        isListening = false;
+
+        if (response.ok) {
+          const data = await response.json();
+          showLegalResponse(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function showLegalResponse(data) {
+      document.getElementById('legalResponseContainer').style.display = 'block';
+      document.getElementById('legalAnswerText').innerText = data.answer;
+
+      const sourcesList = document.getElementById('legalSourcesList');
+      sourcesList.innerHTML = '<strong>Cited:</strong> ' + data.sources.map(s => s.article + ' (Relevance: ' + Math.round(s.relevance_score * 100) + '%)').join(', ');
+
+      // Show audio player
+      document.getElementById('audioPlayerContainer').style.display = 'block';
+      startAudioSimulation();
+    }
+
+    function startAudioSimulation() {
+      isPlaying = true;
+      playbackPercent = 0;
+      document.getElementById('playBtn').innerText = '⏸';
+
+      if (playbackInterval) clearInterval(playbackInterval);
+      playbackInterval = setInterval(() => {
+        playbackPercent += (5 * currentSpeed);
+        if (playbackPercent >= 100) {
+          playbackPercent = 0;
+          isPlaying = false;
+          document.getElementById('playBtn').innerText = '▶';
+          clearInterval(playbackInterval);
+        }
+        document.getElementById('trackFill').style.width = playbackPercent + '%';
+      }, 300);
+    }
+
+    function togglePlayback() {
+      const btn = document.getElementById('playBtn');
+      if (isPlaying) {
+        isPlaying = false;
+        btn.innerText = '▶';
+        clearInterval(playbackInterval);
+      } else {
+        isPlaying = true;
+        btn.innerText = '⏸';
+        playbackInterval = setInterval(() => {
+          playbackPercent += (5 * currentSpeed);
+          if (playbackPercent >= 100) {
+            playbackPercent = 0;
+            isPlaying = false;
+            btn.innerText = '▶';
+            clearInterval(playbackInterval);
+          }
+          document.getElementById('trackFill').style.width = playbackPercent + '%';
+        }, 300);
+      }
+    }
+
+    function toggleSpeed() {
+      const btn = document.getElementById('speedBtn');
+      if (currentSpeed === 1.0) currentSpeed = 1.5;
+      else if (currentSpeed === 1.5) currentSpeed = 2.0;
+      else currentSpeed = 1.0;
+      btn.innerText = currentSpeed.toFixed(1) + 'x';
+    }
+
+    // Initialize
+    updateHeader();
+  </script>
+</body>
+</html>

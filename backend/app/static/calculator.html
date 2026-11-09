@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #ECEEF2;
+      color: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .phone-container {
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      max-height: 920px;
+      background: #ECEEF2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px 16px 28px 16px;
+      position: relative;
+    }
+
+    /* Invisible secret tap zone at top-left to return to Yanchi AI */
+    .secret-tap-zone {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 80px;
+      cursor: default;
+      z-index: 50;
+    }
+
+    /* Big right-aligned number display */
+    .display-area {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 0 12px 32px 12px;
+    }
+
+    .display-text {
+      font-size: 80px;
+      font-weight: 400;
+      color: #000000;
+      line-height: 1;
+      letter-spacing: -2px;
+      cursor: pointer;
+      word-break: break-all;
+    }
+
+    /* 4-column Keypad grid */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 13px;
+    }
+
+    .btn {
+      height: 76px;
+      border-radius: 26px;
+      border: none;
+      font-size: 26px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.08s, filter 0.08s;
+      outline: none;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+      filter: brightness(0.93);
+    }
+
+    /* Function buttons: C, ÷, ×, -, + */
+    .btn-grey {
+      background: #CFD4DC;
+      color: #000000;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    /* Number buttons: 7, 8, 9, 4, 5, 6, 1, 2, 3, . */
+    .btn-white {
+      background: #FFFFFF;
+      color: #000000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    /* Equal button */
+    .btn-dark {
+      background: #21252D;
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Wide 0 button spanning 2 columns */
+    .btn-zero {
+      grid-column: span 2;
+      border-radius: 26px;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <!-- Invisible tap zone (double click top-left returns to Yanchi AI) -->
+    <div class="secret-tap-zone" id="secretZone" title=""></div>
+
+    <!-- Big Right-Aligned Display -->
+    <div class="display-area">
+      <div class="display-text" id="display" onclick="handleDisplayClick()">0</div>
+    </div>
+
+    <!-- Keypad matching screenshot exactly -->
+    <div class="keypad">
+      <!-- Row 1: C, ÷, ×, - -->
+      <button class="btn btn-grey" onclick="press('C')">C</button>
+      <button class="btn btn-grey" onclick="press('÷')">÷</button>
+      <button class="btn btn-grey" onclick="press('×')">×</button>
+      <button class="btn btn-grey" onclick="press('-')">-</button>
+
+      <!-- Row 2: 7, 8, 9, + -->
+      <button class="btn btn-white" onclick="press('7')">7</button>
+      <button class="btn btn-white" onclick="press('8')">8</button>
+      <button class="btn btn-white" onclick="press('9')">9</button>
+      <button class="btn btn-grey" onclick="press('+')">+</button>
+
+      <!-- Row 3: 4, 5, 6, = -->
+      <button class="btn btn-white" onclick="press('4')">4</button>
+      <button class="btn btn-white" onclick="press('5')">5</button>
+      <button class="btn btn-white" onclick="press('6')">6</button>
+      <button class="btn btn-dark" onclick="press('=')">=</button>
+
+      <!-- Row 4: 1, 2, 3, . -->
+      <button class="btn btn-white" onclick="press('1')">1</button>
+      <button class="btn btn-white" onclick="press('2')">2</button>
+      <button class="btn btn-white" onclick="press('3')">3</button>
+      <button class="btn btn-white" onclick="press('.')">.</button>
+
+      <!-- Row 5: 0 (wide) -->
+      <button class="btn btn-white btn-zero" onclick="press('0')">0</button>
+    </div>
+  </div>
+
+  <script>
+    let current = '0';
+    let prev = null;
+    let op = null;
+    let resetNext = false;
+    let inputHistory = '';
+    let secretTapCount = 0;
+
+    function press(val) {
+      inputHistory += val;
+      if (inputHistory.length > 12) inputHistory = inputHistory.slice(-12);
+
+      // Secret unlock codes: 1156= or 2019=
+      if (inputHistory.endsWith('1156=') || inputHistory.endsWith('2019=')) {
+        returnToYanchi();
+        return;
+      }
+
+      if (val === 'C') {
+        current = '0';
+        prev = null;
+        op = null;
+        resetNext = false;
+        updateDisplay();
+        return;
+      }
+
+      if (['+', '-', '×', '÷'].includes(val)) {
+        if (prev !== null && op && !resetNext) {
+          compute();
+        }
+        prev = parseFloat(current);
+        op = val;
+        resetNext = true;
+        return;
+      }
+
+      if (val === '=') {
+        if (prev !== null && op) {
+          compute();
+          prev = null;
+          op = null;
+          resetNext = true;
+        }
+        return;
+      }
+
+      if (val === '.') {
+        if (resetNext) {
+          current = '0.';
+          resetNext = false;
+        } else if (!current.includes('.')) {
+          current += '.';
+        }
+        updateDisplay();
+        return;
+      }
+
+      // Numbers
+      if (current === '0' || resetNext) {
+        current = val;
+        resetNext = false;
+      } else {
+        if (current.length < 12) {
+          current += val;
+        }
+      }
+      updateDisplay();
+    }
+
+    function compute() {
+      const b = parseFloat(current);
+      const a = prev;
+      let res = 0;
+      if (op === '+') res = a + b;
+      else if (op === '-') res = a - b;
+      else if (op === '×') res = a * b;
+      else if (op === '÷') res = b !== 0 ? a / b : 0;
+      current = parseFloat(res.toFixed(6)).toString();
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const el = document.getElementById('display');
+      el.innerText = current;
+      if (current.length > 7) {
+        el.style.fontSize = (560 / current.length) + 'px';
+      } else {
+        el.style.fontSize = '80px';
+      }
+    }
+
+    function returnToYanchi() {
+      window.location.href = '/app';
+    }
+
+    // Double click on display or triple click top-left returns to Yanchi AI
+    let displayClickCount = 0;
+    function handleDisplayClick() {
+      displayClickCount++;
+      if (displayClickCount >= 3) {
+        returnToYanchi();
+      }
+      setTimeout(() => { displayClickCount = 0; }, 600);
+    }
+
+    document.getElementById('secretZone').addEventListener('click', () => {
+      secretTapCount++;
+      if (secretTapCount >= 3) {
+        returnToYanchi();
+      }
+      setTimeout(() => { secretTapCount = 0; }, 800);
+    });
+  </script>
+</body>
+</html>

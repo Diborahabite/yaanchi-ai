@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Yanchi AI",
+    "slug": "yanchi-ai",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#800020"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yanchi.ai"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#800020"
+      },
+      "package": "com.yanchi.ai"
+    },
+    "plugins": ["expo-router"],
+    "scheme": "yanchi"
+  }
+}
