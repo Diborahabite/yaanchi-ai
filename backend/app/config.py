@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     # OpenAI (optional — used for enhanced answer generation)
     OPENAI_API_KEY: str = ""
 
+    # CFA AI Sandbox API
+    CFA_API_BASE_URL: str = "https://your-sandbox-url.com"
+    CFA_TEAM_API_KEY: str = ""
+
     # Vector / embedding store
     VECTOR_DB_PATH: str = "./chroma_db"
 

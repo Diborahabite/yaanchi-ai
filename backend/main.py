@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 
 from app.config import get_settings
-from app.api.routes import wage, legal_qa, audio
+from app.api.routes import wage, legal_qa, audio, cfa
 from app.core.rag_engine import RAGEngine
 
 settings = get_settings()
@@ -83,6 +83,7 @@ API_PREFIX = "/api/v1"
 app.include_router(wage.router, prefix=API_PREFIX, tags=["Wage Calculator"])
 app.include_router(legal_qa.router, prefix=API_PREFIX, tags=["Legal Q&A"])
 app.include_router(audio.router, prefix=API_PREFIX, tags=["Audio"])
+app.include_router(cfa.router, prefix=API_PREFIX, tags=["CFA AI Sandbox"])
 
 
 # ---------------------------------------------------------------------------

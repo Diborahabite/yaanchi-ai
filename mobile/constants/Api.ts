@@ -22,6 +22,7 @@ export const API_BASE_URL = getBaseUrl();
 export const Endpoints = {
   calculateWage: `${API_BASE_URL}/calculate-wage`,
   legalQA: `${API_BASE_URL}/legal-qa`,
+  cfaChat: `${API_BASE_URL}/cfa-chat`,
   transcribe: `${API_BASE_URL}/transcribe`,
   synthesize: `${API_BASE_URL}/synthesize`,
   health: `${API_BASE_URL}/health`,
